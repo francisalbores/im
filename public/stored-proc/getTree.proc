@@ -1,0 +1,61 @@
+SELECT user_ID, b.photo INTO uID_1, uID_avatar_1 FROM `user-meta` as a, `users` as b WHERE user_ID = uID_1 AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_2, uID_avatar_2 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_1 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_3, uID_avatar_3 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_1 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_4, uID_avatar_4 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_2 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_5, uID_avatar_5 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_2 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_6, uID_avatar_6 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_3 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_7, uID_avatar_7 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_3 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_8, uID_avatar_8 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_4 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_9, uID_avatar_9 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_4 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_10, uID_avatar_10 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_5 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_11, uID_avatar_11 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_5 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_12, uID_avatar_12 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_6 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_13, uID_avatar_13 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_6 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_14, uID_avatar_14 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_7 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_15, uID_avatar_15 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_7 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_16, uID_avatar_16 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_8 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_17, uID_avatar_17 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_8 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_18, uID_avatar_18 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_9 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_19, uID_avatar_19 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_9 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_20, uID_avatar_20 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_10 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_21, uID_avatar_21 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_10 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_22, uID_avatar_22 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_11 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_23, uID_avatar_23 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_11 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_24, uID_avatar_24 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_12 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_25, uID_avatar_25 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_12 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_26, uID_avatar_26 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_13 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_27, uID_avatar_27 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_13 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_28, uID_avatar_28 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_14 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_29, uID_avatar_29 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_14 AND position="Right" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_30, uID_avatar_30 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_15 AND position="Left" AND b.ID=a.user_ID;
+
+SELECT user_ID, b.photo INTO uID_31, uID_avatar_31 FROM `user-meta` as a, `users` as b WHERE placement_ID = uID_15 AND position="Right" AND b.ID=a.user_ID;

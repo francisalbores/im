@@ -1,0 +1,9 @@
+RewriteEngine On
+
+RewriteRule ^([a-zA-Z0-9_-]+)+[/]+([a-zA-Z0-9_-]+[^/])$ /index.php?con=$1&func=$2& [QSA]
+RewriteRule ^([a-zA-Z0-9_-]+[^/])$ /index.php?con=front&func=$1& [QSA]
+RewriteRule ^admin/([a-zA-Z0-9_-]+[^/])$ /index.php?con=admin&func=$1& [QSA]
+RewriteRule ^admin/([a-zA-Z0-9_-]+)+[/]+([a-zA-Z0-9_-]+[^/])$ /index.php?con=$1&func=$2& [QSA]
+RewriteRule ^admin/([a-zA-Z0-9_-]+)+[/ajax/]+([a-zA-Z0-9_-]+[^/])$ /index.php?con=$1&func=$2&ajax=1& [QSA]
+
+RewriteRule ^admin/[/geneology/]+[/graphical/]+([a-zA-Z0-9_-]+[^/])$ /index.php?con=geneology&func=graphical&afid=$1& [QSA]

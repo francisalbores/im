@@ -1,0 +1,25 @@
+-- ways of earning
+DECLARE PA INT DEFAULT 0;
+
+-- earning value
+DECLARE Ulti_PA INT DEFAULT 
+
+DECLARE finished INT DEFAULT 0;
+DECLARE pointer_val INT DEFAULT 0;
+DECLARE pointer CURSOR FOR SELECT ID FROM `users`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+
+OPEN pointer;
+runtiltop : LOOP
+
+	FETCH pointer INTO pointer_val; 
+	IF finished = 1 THEN LEAVE runtiltop; END IF;
+
+	-- get PA of Ultimate
+	SELECT COUNT(user_ID) INTO Direct FROM `user-meta` WHERE sponsor_ID = uID AND type = "Ultimate";
+	SET PA = Direct * 
+
+
+
+END LOOP runtiltop;
+CLOSE pointer;

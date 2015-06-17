@@ -1,0 +1,94 @@
+#top{
+	background-color: #333;
+	margin-bottom: 55px;
+	height: 70px;
+}
+#logo{
+	background-color: #333;
+	padding: 0 20px 10px;
+	border-radius: 30px;
+}
+header .nav{
+	position: relative;
+	top: 10px;
+}
+.nav>li>a:focus, .nav>li>a{
+	transition: background 0.2s linear;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 12px;
+}
+.nav>li>a:focus, .nav>li>a:hover{	
+	text-decoration: none;
+	color: #fff;
+	background: #007eff;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.footer{
+	color: #fff;
+	background: #222;
+	font-size: 12px;
+	text-align: center;
+	padding: 10px;
+}
+
+/*pages*/
+#home-jumbotron{
+	position: relative;
+	overflow: hidden;
+	border: 10px solid #aaa;
+	margin-top: 10px;
+}
+#home-jumbotron *{
+	position: relative;
+	z-index: 1;
+	color: rgba(255,255,255,0.4);
+}
+#home-jumbotron p{
+	font-weight: normal;
+	font-size: 16px;
+	letter-spacing: 2px;
+}
+#home-vid{
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+h5{font-weight: bold; font-size: 18px;}
+.home h2{text-align: center;  margin-bottom: 30px;}
+.home #products, .products_services #products{text-align: center;}
+.home #products img, .products_services #products img{height: 150px; margin-bottom: 10px;}
+.home #products p, .products_services #products p{text-align: left;}
+.home #founders {
+	background-color: #eee;
+	border-radius: 10px;
+	text-align: center;
+	padding: 10px 0;
+}
+.home #founders h3{font-weight: bold;}
+.home #blurbs .fa, .login #blurbs .fa{font-size: 80px; text-align: center;display: block;}
+.home #blurbs h5,  .login #blurbs h5{text-align: center;}
+.login #blurbs {
+	background-color: #eee;
+	padding-top: 20px;
+}
+.investors, .products_services{
+	text-align: center;
+}
+.investors .row img {
+  height: 250px;
+  width: 250px;
+  border: 10px solid #fff;
+}
+
+@media (max-width: 1200px){
+	#main-menu{
+		left:20px;
+	}
+	#logo{
+		position: absolute;
+	}
+}

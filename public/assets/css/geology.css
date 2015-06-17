@@ -1,0 +1,50 @@
+.geo-row .item .box{
+	box-shadow: 0px 0px 1px #333;
+	width:50px;
+	height: 50px;
+	border-radius: 50%;
+	line-height: 50px;
+	font-size: 10px;
+}
+.geo-row .item .box a{
+	cursor: pointer;
+}
+.geo-center{
+	margin: auto;
+}
+.geo-row{
+	text-align: center;
+	display: block;
+	border-top:1px solid #aaa;
+}
+.geo-row .item .head{
+	border-left: 1px solid #999;
+	width:1px;
+	height: 1px;
+}
+.geo-row .item .tail{
+	border-left: 1px solid #999;
+	width:1px;
+	height: 1px;
+}
+.geo-row .item{
+	display: inline-block;
+}
+.g-1 {
+	border-top: none;
+}
+.g-2 .item{
+	margin: 0 188px;
+}
+.g-3 .item{
+	margin: 0 80px;
+}
+.g-4 .item{
+	margin: 0 27px;
+}
+
+.geo-row img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}

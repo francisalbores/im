@@ -1,0 +1,35 @@
+DECLARE finished INT DEFAULT 0;
+DECLARE ancestors TEXT DEFAULT '';
+DECLARE pointer_val INT DEFAULT placement_ID;
+DECLARE pointer CURSOR FOR SELECT ID FROM `users` WHERE ID = pointer_val;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+
+-- // insert to user
+INSERT INTO `users` (`name`,`password`,email,mobile,photo,address,username) 
+VALUES (_name,_password,email,mobile,photo,address,username);
+
+
+SET _user_ID = LAST_INSERT_ID();
+SET pointer_val = placement_ID;
+
+-- // but first get the ancestors
+	-- start sa loop
+	OPEN pointer;
+	runtiltop : LOOP
+		SET ancestors = CONCAT(ancestors,pointer_val);
+		SET ancestors = CONCAT(ancestors,',');
+
+		IF pointer_val = 1 THEN LEAVE runtiltop; END IF;
+		IF finished = 1 THEN LEAVE runtiltop; END IF;
+		
+		SELECT a.placement_ID INTO pointer_val FROM `user-meta` AS a WHERE a.user_ID = pointer_val;				
+	END LOOP runtiltop;
+	CLOSE pointer;
+
+-- // insert to user-meta
+INSERT INTO `user-meta` (user_ID,sponsor_ID,placement_ID,`position`,ancestors, type) 
+VALUES (_user_ID, sponsor_ID, placement_ID,_position,ancestors, _type);
+
+-- // insert to user-payment
+INSERT INTO `user-payment` (user_ID,payment_type,amount,`code`, receipt_url) 
+VALUES (_user_ID,payment_type,amount,_code, receipt_url);

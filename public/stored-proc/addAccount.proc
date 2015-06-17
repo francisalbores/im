@@ -1,0 +1,45 @@
+DECLARE acc_count INT DEFAULT 0;
+DECLARE _user_ID INT DEFAULT 0;
+DECLARE tmp1 INT DEFAULT 0;
+
+DECLARE finished INT DEFAULT 0;
+DECLARE ancestors TEXT DEFAULT '';
+DECLARE pointer_val INT DEFAULT _placement_ID;
+DECLARE pointer CURSOR FOR SELECT ID FROM `users` WHERE ID = pointer_val;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+SET _error = "";
+
+-- check if account is 7 
+SELECT COUNT(a.ID) INTO acc_count FROM users AS a, users AS b WHERE a.name = b.name AND b.ID = _ID AND b._status = 1;
+IF acc_count > 6 THEN SET _error = "USER-MAX"; LEAVE func; END IF;
+-- check if crossline
+SELECT COUNT(a.user_ID) INTO tmp1 FROM `user-meta` as a WHERE a.ancestors LIKE CONCAT('%', _ID,'%') AND a.user_ID = _placement_ID;
+IF tmp1 = 0 THEN SET _error = "CROSSLINE"; LEAVE func; END IF; 
+-- check if valid placement id
+SELECT COUNT(a.user_ID) INTO tmp1 FROM `user-meta` as a WHERE a.placement_ID = _placement_ID AND a.position = _position;
+IF tmp1 > 0 THEN SET _error = "OCCUPIED"; LEAVE func; END IF; 
+
+
+INSERT INTO `users`(`name`,`password`,`email`,`mobile`,`address`,`username`,`photo`)
+SELECT `name`,`password`,`email`,`mobile`,`address`,_username,`photo` FROM `users` WHERE ID = _ID;
+SET _user_ID = LAST_INSERT_ID();
+
+-- // but first get the ancestors
+	-- start sa loop
+	OPEN pointer;
+	runtiltop : LOOP
+		SET ancestors = CONCAT(ancestors,pointer_val);
+		SET ancestors = CONCAT(ancestors,',');
+
+		IF pointer_val = 1 THEN LEAVE runtiltop; END IF;
+		IF finished = 1 THEN LEAVE runtiltop; END IF;
+		
+		SELECT a.placement_ID INTO pointer_val FROM `user-meta` AS a WHERE a.user_ID = pointer_val;				
+	END LOOP runtiltop;
+	CLOSE pointer;
+
+INSERT INTO `user-meta`(`user_ID`,`sponsor_ID`,`placement_ID`,`position`,`ancestors`,`_type`,`date_reg`)
+VALUES(_user_ID,_ID,_placement_ID,_position,ancestors,_type,CURDATE());
+
+INSERT INTO `transactions` (status,user_ID,`type`,date_trans, amount, notes)
+VALUES (1,_ID,"Add Account",CURDATE(),_amount,"COMMISSION DEDUCTION");

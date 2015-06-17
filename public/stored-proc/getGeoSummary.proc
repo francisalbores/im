@@ -1,0 +1,315 @@
+DECLARE user_type TEXT;
+DECLARE Left_ID TEXT;
+DECLARE Right_ID TEXT;
+
+DECLARE Left_type TEXT;
+DECLARE Right_type TEXT;
+
+DECLARE UltimateGpaPoints INT DEFAULT 5;
+DECLARE PremierGpaPoints INT DEFAULT 2;
+DECLARE BasicGpaPoints INT DEFAULT 1;
+
+DECLARE UltimatePaPoints INT DEFAULT 50;
+DECLARE PremierPaPoints INT DEFAULT 25;
+DECLARE BasicPaPoints INT DEFAULT 15;
+
+DECLARE tmp1 INT DEFAULT 0;
+DECLARE tmp2 INT DEFAULT 0;
+DECLARE tmp3 INT DEFAULT 0;
+DECLARE tmp4 INT DEFAULT 0;
+
+SELECT _type INTO user_type FROM `user-meta` WHERE user_ID = uID;
+
+SELECT COUNT(user_ID) INTO Direct FROM `user-meta` WHERE sponsor_ID = uID;
+
+SELECT COUNT(user_ID) INTO Total FROM `user-meta` WHERE ancestors LIKE CONCAT('%', uID, '%');
+
+SET Indirect = Total - Direct;
+
+SELECT user_ID,_type INTO Left_ID,Left_type FROM `user-meta` WHERE placement_ID = uID AND `position` = "Left";
+SELECT user_ID,_type INTO Right_ID,Right_type FROM `user-meta` WHERE placement_ID = uID AND `position` = "Right"; 
+
+SELECT (COUNT(user_ID)+1) INTO `Left` FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%');
+SELECT (COUNT(user_ID)+1) INTO `Right` FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%');
+
+-- count left and right points
+IF user_type = "Ultimate" THEN
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * UltimateGpaPoints) INTO tmp1 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Ultimate") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * PremierGpaPoints) INTO tmp2 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Premier") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp3 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Basic") AS p;
+	IF Left_type = "Ultimate" THEN SET tmp4 = UltimateGpaPoints;
+	ELSEIF Left_type = "Premier" THEN SET tmp4 = PremierGpaPoints;
+	ELSEIF Left_type = "Basic" THEN SET tmp4 = BasicGpaPoints; END IF;
+ELSEIF user_type = "Premier" THEN
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * PremierGpaPoints) INTO tmp1 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Ultimate") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * PremierGpaPoints) INTO tmp2 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Premier") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp3 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Basic") AS p;
+	IF Left_type = "Ultimate" THEN SET tmp4 = PremierGpaPoints;
+	ELSEIF Left_type = "Premier" THEN SET tmp4 = PremierGpaPoints;
+	ELSEIF Left_type = "Basic" THEN SET tmp4 = BasicGpaPoints; END IF;
+ELSEIF user_type = "Basic" THEN
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp1 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Ultimate") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp2 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Premier") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp3 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Left_ID,','), uID, '%') AND _type = "Basic") AS p;
+	IF Left_type = "Ultimate" THEN SET tmp4 = BasicGpaPoints;
+	ELSEIF Left_type = "Premier" THEN SET tmp4 = BasicGpaPoints;
+	ELSEIF Left_type = "Basic" THEN SET tmp4 = BasicGpaPoints; END IF;
+END IF;
+
+SET Left_points = (tmp1 + tmp2 + tmp3 + tmp4);
+
+IF user_type = "Ultimate" THEN
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * UltimateGpaPoints) INTO tmp1 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Ultimate") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * PremierGpaPoints) INTO tmp2 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Premier") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp3 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Basic") AS p;
+	IF Right_type = "Ultimate" THEN SET tmp4 = UltimateGpaPoints;
+	ELSEIF Right_type = "Premier" THEN SET tmp4 = PremierGpaPoints;
+	ELSEIF Right_type = "Basic" THEN SET tmp4 = BasicGpaPoints; END IF;
+ELSEIF user_type = "Premier" THEN
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * PremierGpaPoints) INTO tmp1 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Ultimate") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * PremierGpaPoints) INTO tmp2 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Premier") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp3 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Basic") AS p;
+	IF Right_type = "Ultimate" THEN SET tmp4 = PremierGpaPoints;
+	ELSEIF Right_type = "Premier" THEN SET tmp4 = PremierGpaPoints;
+	ELSEIF Right_type = "Basic" THEN SET tmp4 = BasicGpaPoints; END IF;
+ELSEIF user_type = "Basic" THEN
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp1 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Ultimate") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp2 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Premier") AS p;
+	SELECT (SUM(IF(p._tmp1=0,0,p._tmp1)) * BasicGpaPoints) INTO tmp3 FROM (SELECT COUNT(user_ID) AS _tmp1 FROM `user-meta` WHERE ancestors LIKE CONCAT(CONCAT('%', Right_ID,','), uID, '%') AND _type = "Basic") AS p;
+	IF Right_type = "Ultimate" THEN SET tmp4 = BasicGpaPoints;
+	ELSEIF Right_type = "Premier" THEN SET tmp4 = BasicGpaPoints;
+	ELSEIF Right_type = "Basic" THEN SET tmp4 = BasicGpaPoints; END IF;
+END IF;
+
+SET Right_points = (tmp1 + tmp2 + tmp3 + tmp4);
+-- end count left and right points
+
+-- count PA points
+IF user_type = "Ultimate" THEN
+	SELECT ( COUNT(user_ID) * UltimatePaPoints ) INTO tmp1 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Ultimate";
+	SELECT ( COUNT(user_ID) * PremierPaPoints ) INTO tmp2 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Premier";
+	SELECT ( COUNT(user_ID) * BasicPaPoints ) INTO tmp3 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Basic";
+ELSEIF user_type = "Premier" THEN
+	SELECT ( COUNT(user_ID) * PremierPaPoints ) INTO tmp1 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Ultimate";
+	SELECT ( COUNT(user_ID) * PremierPaPoints ) INTO tmp2 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Premier";
+	SELECT ( COUNT(user_ID) * BasicPaPoints ) INTO tmp3 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Basic";
+ELSEIF user_type = "Basic" THEN
+	SELECT ( COUNT(user_ID) * BasicPaPoints ) INTO tmp1 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Ultimate";
+	SELECT ( COUNT(user_ID) * BasicPaPoints ) INTO tmp2 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Premier";
+	SELECT ( COUNT(user_ID) * BasicPaPoints ) INTO tmp3 FROM `user-meta` WHERE sponsor_ID = uID AND _type = "Basic";
+END IF;
+
+SET Direct_points = (tmp1 + tmp2 + tmp3);
+
+-- end count PA points
+
+-- levels (up to 10 levels)
+-- level 1
+DROP TEMPORARY TABLE IF EXISTS temp_lvl;
+DROP TEMPORARY TABLE IF EXISTS temp_lvl2;
+CREATE TEMPORARY TABLE IF NOT EXISTS temp_lvl (_level CHAR(10) NOT NULL,
+						uID CHAR(10) NOT NULL,
+						sID CHAR(10) NOT NULL,
+						pID CHAR(10) NOT NULL,
+						uName CHAR(20) NOT NULL,
+						sName CHAR(20) NOT NULL,
+						pName CHAR(20) NOT NULL,
+						dateRegister DATE,
+						_type CHAR(10) NOT NULL) ENGINE=MEMORY;
+CREATE TEMPORARY TABLE IF NOT EXISTS temp_lvl2 (_level CHAR(10) NOT NULL,
+						uID CHAR(10) NOT NULL,
+						sID CHAR(10) NOT NULL,
+						pID CHAR(10) NOT NULL,
+						uName CHAR(20) NOT NULL,
+						sName CHAR(20) NOT NULL,
+						pName CHAR(20) NOT NULL,
+						dateRegister DATE,
+						_type CHAR(10) NOT NULL) ENGINE=MEMORY;
+
+INSERT INTO temp_lvl
+SELECT 	
+		"1" AS _level,
+	    u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b
+WHERE 	u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		s.ID = uID;
+		
+INSERT INTO temp_lvl2
+SELECT 	
+		"2" AS _level,
+	    u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "1" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"3" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "2" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"4" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "3" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"5" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "4" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"6" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "5" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"7" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "6" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"8" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "7" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"9" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "8" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2; TRUNCATE temp_lvl2;
+
+INSERT INTO temp_lvl2
+SELECT 	
+		"10" AS _level,
+	        u.ID AS _uID,
+	    s.ID,
+	    p.ID,
+		u.name AS uName, 
+		s.name AS sName, 
+		p.name AS pName,
+		b.date_reg AS dateRegister,
+		b._type AS _type
+FROM `users` AS u, `users` AS s, `users` AS p,  `user-meta` AS b, temp_lvl AS c
+WHERE 		u.ID = b.user_ID AND 
+		s.ID = b.sponsor_ID AND
+		p.ID = b.placement_ID AND
+		c._level = "9" AND
+		c.uID = b.sponsor_ID;		
+INSERT INTO temp_lvl SELECT * FROM temp_lvl2;
